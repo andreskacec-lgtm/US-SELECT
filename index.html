@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>US Select - Importaciones y Compras en USA</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Tailwind Config for Custom Colors -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            primary: '#D23056', /* Rojo/Rosa fuerte del logo */
+                            primaryHover: '#A62241',
+                            dark: '#2D1B20', /* Un tono oscuro cálido y elegante */
+                            light: '#FFFFFF',
+                            blush: '#FDF0F3', /* El fondo rosa pálido exacto de tu logo */
+                            blushDark: '#F7E1E6',
+                            gray: '#64748B'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #FDF0F3; }
+        ::-webkit-scrollbar-thumb { background: #D23056; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #A62241; }
+        
+        .glass-nav {
+            background: rgba(253, 240, 243, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(210, 48, 86, 0.1);
+        }
+
+        .product-card {
+            transition: all 0.3s ease;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(210, 48, 86, 0.1), 0 10px 10px -5px rgba(210, 48, 86, 0.04);
+        }
+
+        /* Animación del carrusel de ideas */
+        @keyframes scroll-left {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(calc(-50% - 0.75rem)); } /* Desplaza la mitad del ancho total */
+        }
+        .animate-scroll-left {
+            display: flex;
+            width: max-content;
+            animation: scroll-left 35s linear infinite;
+        }
+        .animate-scroll-left:hover {
+            animation-play-state: paused;
+        }
+    </style>
+</head>
+<body class="font-sans bg-brand-blush text-brand-dark antialiased selection:bg-brand-primary selection:text-white">
+
+    <!-- Navbar -->
+    <nav class="fixed w-full z-50 glass-nav transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center cursor-pointer" onclick="window.scrollTo(0,0)">
+                    <img src="WhatsApp Image 2026-04-17 at 3.37.27 PM.jpeg" alt="Logo US Select" class="h-16 w-auto mix-blend-multiply" onerror="this.src='https://ui-avatars.com/api/?name=US+Select&background=C93B57&color=fff&rounded=true'">
+                </div>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="#como-funciona" class="text-brand-dark/80 hover:text-brand-primary font-semibold transition-colors">¿Cómo funciona?</a>
+                    <a href="#stock" class="text-brand-dark/80 hover:text-brand-primary font-semibold transition-colors flex items-center gap-1">
+                        <i data-lucide="package" class="h-4 w-4"></i> Entrega Inmediata
+                    </a>
+                    <a href="#ideas" class="text-brand-primary font-bold hover:text-brand-primaryHover transition-colors flex items-center gap-1">
+                        <i data-lucide="lightbulb" class="h-4 w-4"></i> Inspiración
+                    </a>
+                    <a href="#cotizar" class="bg-brand-primary hover:bg-brand-primaryHover text-white px-6 py-2.5 rounded-lg font-bold transition-all shadow-md shadow-brand-primary/40 flex items-center gap-2">
+                        <i data-lucide="plane-takeoff" class="h-4 w-4"></i> Cotizar Importación
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-brand-dark hover:text-brand-primary focus:outline-none p-2">
+                        <i data-lucide="menu" class="h-7 w-7"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Panel -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-brand-blush shadow-xl absolute w-full z-40">
+            <div class="px-4 pt-2 pb-6 space-y-2">
+                <a href="#como-funciona" class="block px-3 py-3 text-base font-semibold text-brand-dark/80 hover:bg-brand-blush hover:text-brand-primary rounded-lg">¿Cómo funciona?</a>
+                <a href="#stock" class="block px-3 py-3 text-base font-semibold text-brand-dark/80 hover:bg-brand-blush hover:text-brand-primary rounded-lg flex items-center gap-2">
+                    <i data-lucide="package" class="h-5 w-5"></i> Entrega Inmediata (Stock)
+                </a>
+                <a href="#ideas" class="block px-3 py-3 text-base font-bold text-brand-primary hover:bg-brand-blush rounded-lg flex items-center gap-2">
+                    <i data-lucide="lightbulb" class="h-5 w-5"></i> Inspiración de Compras
+                </a>
+                <a href="#cotizar" class="block px-3 py-3 text-base font-bold text-white bg-brand-primary hover:bg-brand-primaryHover rounded-lg text-center mt-4 shadow-md shadow-brand-primary/30">
+                    Cotizar Importación
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative pt-28 pb-16 lg:pt-36 lg:pb-24 overflow-hidden bg-brand-blush">
+        <!-- Background Pattern / Decorations -->
+        <div class="absolute inset-0 z-0 opacity-[0.05]" style="background-image: radial-gradient(#D23056 1px, transparent 1px); background-size: 24px 24px;"></div>
+        <div class="absolute top-20 left-10 w-96 h-96 bg-white rounded-full mix-blend-overlay filter blur-[80px] opacity-60"></div>
+        <div class="absolute bottom-10 right-10 w-[500px] h-[500px] bg-brand-blushDark rounded-full mix-blend-multiply filter blur-[100px] opacity-60"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="flex flex-col lg:flex-row items-center gap-12 lg:gap-8">
+                <!-- Text Content -->
+                <div class="w-full lg:w-1/2 text-center lg:text-left">
+                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-brand-primary/20 text-brand-primary text-sm font-bold mb-6 shadow-sm">
+                        <span class="relative flex h-2.5 w-2.5">
+                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-primary opacity-75"></span>
+                          <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-brand-primary"></span>
+                        </span>
+                        Envíos seguros a toda Colombia
+                    </div>
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-brand-dark tracking-tight mb-6 leading-[1.15]">
+                        Lo que quieras de <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-primary to-rose-400">USA</span>,<br> en la puerta de tu casa.
+                    </h1>
+                    <p class="text-lg sm:text-xl text-brand-dark/70 mb-8 max-w-2xl mx-auto lg:mx-0 font-medium">
+                        En <strong class="text-brand-dark">US Select</strong> importamos el producto exacto que buscas directamente desde Estados Unidos. Además, contamos con artículos exclusivos en stock listos para entrega inmediata.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                        <a href="#cotizar" class="bg-brand-primary hover:bg-brand-primaryHover text-white px-8 py-4 rounded-xl font-bold text-lg transition-all shadow-lg shadow-brand-primary/30 flex items-center justify-center gap-2 hover:-translate-y-1">
+                            <i data-lucide="search" class="h-5 w-5"></i> Traer un producto
+                        </a>
+                        <a href="#stock" class="bg-white hover:bg-brand-blushDark text-brand-dark border-2 border-white px-8 py-4 rounded-xl font-bold text-lg transition-all flex items-center justify-center gap-2 hover:-translate-y-1 shadow-md">
+                            <i data-lucide="shopping-bag" class="h-5 w-5 text-brand-primary"></i> Ver Stock Local
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Hero Image Grid -->
+                <div class="w-full lg:w-1/2">
+                    <div class="relative grid grid-cols-2 gap-4">
+                        <!-- Glow Effect behind images -->
+                        <div class="absolute -inset-4 bg-gradient-to-tr from-brand-primary/30 to-white/50 rounded-3xl blur-2xl z-0"></div>
+                        
+                        <img src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Compras online" class="relative z-10 rounded-[2rem] shadow-xl w-full h-48 sm:h-64 object-cover transform translate-y-4 border-4 border-white">
+                        <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Cajas de envío" class="relative z-10 rounded-[2rem] shadow-xl w-full h-48 sm:h-64 object-cover transform -translate-y-4 border-4 border-white">
+                        <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Audífonos tech" class="relative z-10 rounded-[2rem] shadow-xl w-full h-40 sm:h-48 object-cover col-span-2 object-center border-4 border-white">
+                        
+                        <!-- Floating Trust Badge -->
+                        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20 bg-white/95 backdrop-blur-md px-6 py-4 rounded-2xl shadow-2xl flex items-center gap-3 border border-brand-blush">
+                            <div class="bg-brand-blushDark p-2 rounded-full text-brand-primary">
+                                <i data-lucide="shield-check" class="h-6 w-6"></i>
+                            </div>
+                            <div class="text-left">
+                                <p class="text-sm font-bold text-brand-dark">100% Original</p>
+                                <p class="text-xs text-brand-dark/60 font-medium">Garantía de compra</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="como-funciona" class="py-24 bg-white relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-3xl md:text-4xl font-extrabold text-brand-dark mb-4">¿Cómo importar tu producto?</h2>
+                <p class="text-brand-dark/70 text-lg font-medium">Traer tus compras de Estados Unidos nunca fue tan fácil. Nosotros nos encargamos de toda la logística, aduanas y envío nacional.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Step 1 -->
+                <div class="bg-brand-blush p-8 rounded-3xl shadow-sm border border-white text-center relative group hover:shadow-xl hover:shadow-brand-primary/10 transition-all duration-300 transform hover:-translate-y-2">
+                    <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:bg-brand-primary group-hover:text-white transition-colors text-brand-primary shadow-sm">
+                        <i data-lucide="search" class="h-8 w-8"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-brand-dark mb-3">1. Dinos qué buscas</h3>
+                    <p class="text-brand-dark/70 text-sm leading-relaxed">Dinos qué producto deseas traer de Estados Unidos y envíanos su nombre o características a través de nuestro formulario o WhatsApp.</p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="bg-brand-blush p-8 rounded-3xl shadow-sm border border-white text-center relative group hover:shadow-xl hover:shadow-brand-primary/10 transition-all duration-300 transform hover:-translate-y-2">
+                    <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:bg-brand-primary group-hover:text-white transition-colors text-brand-primary shadow-sm">
+                        <i data-lucide="calculator" class="h-8 w-8"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-brand-dark mb-3">2. Cotizamos</h3>
+                    <p class="text-brand-dark/70 text-sm leading-relaxed">Te enviamos el valor total puesto en Colombia. Sin sorpresas, el precio final incluye impuestos y envío internacional.</p>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="bg-brand-blush p-8 rounded-3xl shadow-sm border border-white text-center relative group hover:shadow-xl hover:shadow-brand-primary/10 transition-all duration-300 transform hover:-translate-y-2">
+                    <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:bg-brand-primary group-hover:text-white transition-colors text-brand-primary shadow-sm">
+                        <i data-lucide="credit-card" class="h-8 w-8"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-brand-dark mb-3">3. Abonas</h3>
+                    <p class="text-brand-dark/70 text-sm leading-relaxed">Realizas un abono inicial de seguridad para realizar la compra internacional, y nosotros nos encargamos de hacer el pedido.</p>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="bg-brand-blush p-8 rounded-3xl shadow-sm border border-white text-center relative group hover:shadow-xl hover:shadow-brand-primary/10 transition-all duration-300 transform hover:-translate-y-2">
+                    <div class="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:bg-brand-primary group-hover:text-white transition-colors text-brand-primary shadow-sm">
+                        <i data-lucide="package-check" class="h-8 w-8"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-brand-dark mb-3">4. Recibes</h3>
+                    <p class="text-brand-dark/70 text-sm leading-relaxed">En pocos días el producto llega a Colombia. Pagas el excedente restante y te lo entregamos directamente en tu domicilio.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- In Stock Section (10 Products) -->
+    <section id="stock" class="py-24 bg-brand-blush relative">
+        <!-- Decoración de fondo -->
+        <div class="absolute top-0 right-0 w-full h-64 bg-gradient-to-b from-white to-transparent opacity-50 z-0"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
+                <div class="max-w-2xl">
+                    <span class="text-brand-primary font-extrabold tracking-wider uppercase text-sm mb-2 block">Stock Inmediato</span>
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-brand-dark">Productos Exclusivos</h2>
+                    <p class="text-brand-dark/70 mt-4 text-lg font-medium">No esperes los tiempos de importación. Estos artículos ya están en Colombia listos para ser despachados hoy mismo.</p>
+                </div>
+                <div class="flex items-center gap-2 text-sm font-bold text-brand-primary bg-white px-5 py-2.5 rounded-xl shadow-sm border border-brand-primary/10">
+                    <i data-lucide="truck" class="h-5 w-5"></i> Envío Nacional Express
+                </div>
+            </div>
+
+            <!-- Grid 10 Productos -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+                
+                <!-- Product 1 -->
+                <div class="product-card bg-white rounded-3xl overflow-hidden flex flex-col h-full shadow-sm border border-white">
+                    <div class="relative aspect-square overflow-hidden bg-white p-2">
+                        <img src="WhatsApp Image 2026-04-17 at 3.50.35 PM.jpeg" alt="Billetera Michael Kors" class="object-cover w-full h-full rounded-2xl">
+                        <span class="absolute top-4 right-4 bg-brand-primary text-white text-xs font-bold px-3 py-1.5 rounded-lg shadow-md">Stock</span>
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow">
+                        <p class="text-xs text-brand-primary font-bold mb-1 uppercase tracking-wider">Designer</p>
+                        <h3 class="text-lg font-bold text-brand-dark leading-tight mb-2">Billetera Michael Kors Original Monograma</h3>
+                        <div class="mt-auto pt-4">
+                            <button onclick="comprarStock('Billetera Michael Kors Monograma')" class="w-full bg-brand-dark hover:bg-brand-primary text-white font-bold py-3 rounded-xl flex justify-center items-center gap-2 transition-colors text-sm shadow-md">
+                                <i data-lucide="shopping-cart" class="h-4 w-4"></i> Lo Quiero
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 2 -->
+                <div class="product-card bg-white rounded-3xl overflow-hidden flex flex-col h-full shadow-sm border border-white">
+                    <div class="relative aspect-square overflow-hidden bg-white p-2">
+                        <img src="WhatsApp Image 2026-04-17 at 3.50.21 PM.jpeg" alt="Cosmetiquera Michael Kors" class="object-cover w-full h-full rounded-2xl">
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow">
+                        <p class="text-xs text-brand-primary font-bold mb-1 uppercase tracking-wider">Designer</p>
+                        <h3 class="text-lg font-bold text-brand-dark leading-tight mb-2">Cosmetiquera Michael Kors Jet-Set Fruit</h3>
+                        <div class="mt-auto pt-4">
+                            <button onclick="comprarStock('Cosmetiquera Michael Kors Jet-Set')" class="w-full bg-brand-dark hover:bg-brand-primary text-white font-bold py-3 rounded-xl flex justify-center items-center gap-2 transition-colors text-sm shadow-md">
+                                <i data-lucide="shopping-cart" class="h-4 w-4"></i> Lo Quiero
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 3 -->
+                <div class="product-card bg-white rounded-3xl overflow-hidden flex flex-col h-full shadow-sm border border-white">
+                    <div class="relative aspect-square overflow-hidden bg-white p-2">
+                        <img src="WhatsApp Image 2026-04-17 at 4.00.05 PM (2).jpeg" alt="Bloqueador Solar Tocobo" class="object-cover w-full h-full rounded-2xl">
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow">
+                        <p class="text-xs text-brand-primary font-bold mb-1 uppercase tracking-wider">Skincare</p>
+                        <h3 class="text-lg font-bold text-brand-dark leading-tight mb-2">Bloqueador Solar Tocobo Cotton Soft Sun Stick</h3>
+                        <div class="mt-auto pt-4">
+                            <button onclick="comprarStock('Bloqueador Solar Tocobo')" class="w-full bg-brand-dark hover:bg-brand-primary text-white font-bold py-3 rounded-xl flex justify-center items-center gap-2 transition-colors text-sm shadow-md">
+                                <i data-lucide="shopping-cart" class="h-4 w-4"></i> Lo Quiero
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 4 -->
+                <div class="product-card bg-white rounded-3xl overflow-hidden flex flex-col h-full shadow-sm border border-white">
+                    <div class="relative aspect-square overflow-hidden bg-white p-2">
+                        <img src="WhatsApp Image 2026-04-17 at 4.00.05 PM (1).jpeg" alt="Billetera Coach Marrón" class="object-cover w-full h-full rounded-2xl">
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow">
+                        <p class="text-xs text-brand-primary font-bold mb-1 uppercase tracking-wider">Designer</p>
+                        <h3 class="text-lg font-bold text-brand-dark leading-tight mb-2">Billetera de Mano Coach Monograma Marrón</h3>
+                        <div class="mt-auto pt-4">
+                            <button onclick="comprarStock('Billetera de Mano Coach Marrón')" class="w-full bg-brand-dark hover:bg-brand-primary text-white font-bold py-3 rounded-xl flex justify-center items-center gap-2 transition-colors text-sm shadow-md">
+                                <i data-lucide="shopping-cart" class="h-4 w-4"></i> Lo Quiero
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 5 -->
+                <div class="product-card bg-white rounded-3xl overflow-hidden flex flex-col h-full shadow-sm border border-white">
+                    <div class="relative aspect-square overflow-hidden bg-white p-2">
+                        <img src="WhatsApp Image 2026-04-17 at 4.00.05 PM.jpeg" alt="Billetera Coach Negra" class="object-cover w-full h-full rounded-2xl">
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow">
+                        <p class="text-xs text-brand-primary font-bold mb-1 uppercase tracking-wider">Designer</p>
+                        <h3 class="text-lg font-bold text-brand-dark leading-tight mb-2">Billetera de Mano Coach Clásica Negra</h3>
+                        <div class="mt-auto pt-4">
+                            <button onclick="comprarStock('Billetera de Mano Coach Negra')" class="w-full bg-brand-dark hover:bg-brand-primary text-white font-bold py-3 rounded-xl flex justify-center items-center gap-2 transition-colors text-sm shadow-md">
+                                <i data-lucide="shopping-cart" class="h-4 w-4"></i> Lo Quiero
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 6 (AMP Board) -->
+                <div class="product-card bg-white rounded-3xl overflow-hidden flex flex-col h-full shadow-sm border border-white">
+                    <div class="relative aspect-square overflow-hidden bg-white p-2">
+                        <img src="WhatsApp Image 2026-04-17 at 4.12.39 PM.jpeg" alt="Patineta Eléctrica AMP Board" class="object-contain w-full h-full rounded-2xl">
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow">
+                        <p class="text-xs text-brand-primary font-bold mb-1 uppercase tracking-wider">Movilidad / Tech</p>
+                        <h3 class="text-lg font-bold text-brand-dark leading-tight mb-2">Patineta Eléctrica AMP Board Premium</h3>
+                        <div class="mt-auto pt-4">
+                            <button onclick="comprarStock('Patineta Eléctrica AMP Board')" class="w-full bg-brand-dark hover:bg-brand-primary text-white font-bold py-3 rounded-xl flex justify-center items-center gap-2 transition-colors text-sm shadow-md">
+                                <i data-lucide="shopping-cart" class="h-4 w-4"></i> Lo Quiero
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 7 (Shampoo Moev) -->
+                <div class="product-card bg-white rounded-3xl overflow-hidden flex flex-col h-full shadow-sm border border-white">
+                    <div class="relative aspect-square overflow-hidden bg-white p-2">
+                        <img src="WhatsApp Image 2026-04-17 at 4.13.44 PM.jpeg" alt="Shampoo Moev" class="object-contain w-full h-full rounded-2xl">
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow">
+                        <p class="text-xs text-brand-primary font-bold mb-1 uppercase tracking-wider">Cuidado Capilar</p>
+                        <h3 class="text-lg font-bold text-brand-dark leading-tight mb-2">Shampoo Moev Annurcatint 300ml</h3>
+                        <div class="mt-auto pt-4">
+                            <button onclick="comprarStock('Shampoo Moev Annurcatint')" class="w-full bg-brand-dark hover:bg-brand-primary text-white font-bold py-3 rounded-xl flex justify-center items-center gap-2 transition-colors text-sm shadow-md">
+                                <i data-lucide="shopping-cart" class="h-4 w-4"></i> Lo Quiero
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 8 (NEW: Oro) -->
+                <div class="product-card bg-white rounded-3xl overflow-hidden flex flex-col h-full shadow-sm border border-white">
+                    <div class="relative aspect-square overflow-hidden bg-white p-2">
+                        <img src="oro.jpg" alt="Lingote de Oro 24K" class="object-cover w-full h-full rounded-2xl">
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow">
+                        <p class="text-xs text-brand-primary font-bold mb-1 uppercase tracking-wider">Joyería / Inversión</p>
+                        <h3 class="text-lg font-bold text-brand-dark leading-tight mb-2">Lingote de Oro 24K 1g - Edición Colombia</h3>
+                        <div class="mt-auto pt-4">
+                            <button onclick="comprarStock('Lingote de Oro 24K 1g')" class="w-full bg-brand-dark hover:bg-brand-primary text-white font-bold py-3 rounded-xl flex justify-center items-center gap-2 transition-colors text-sm shadow-md">
+                                <i data-lucide="shopping-cart" class="h-4 w-4"></i> Lo Quiero
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 9 -->
+                <div class="product-card bg-white rounded-3xl overflow-hidden flex flex-col h-full shadow-sm border border-white">
+                    <div class="relative aspect-square overflow-hidden bg-white p-2">
+                        <img src="https://images.unsplash.com/photo-1627123424574-724758594e93?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Billetera" class="object-cover w-full h-full rounded-2xl">
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow">
+                        <p class="text-xs text-brand-primary font-bold mb-1 uppercase tracking-wider">Accesorios</p>
+                        <h3 class="text-lg font-bold text-brand-dark leading-tight mb-2">Billetera Minimalista en Cuero Genuino</h3>
+                        <div class="mt-auto pt-4">
+                            <button onclick="comprarStock('Billetera Cuero Minimalista')" class="w-full bg-brand-dark hover:bg-brand-primary text-white font-bold py-3 rounded-xl flex justify-center items-center gap-2 transition-colors text-sm shadow-md">
+                                <i data-lucide="shopping-cart" class="h-4 w-4"></i> Lo Quiero
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Product 10 -->
+                <div class="product-card bg-white rounded-3xl overflow-hidden flex flex-col h-full shadow-sm border border-white">
+                    <div class="relative aspect-square overflow-hidden bg-white p-2">
+                        <img src="https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Cámara de acción" class="object-cover w-full h-full rounded-2xl">
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow">
+                        <p class="text-xs text-brand-primary font-bold mb-1 uppercase tracking-wider">Tecnología</p>
+                        <h3 class="text-lg font-bold text-brand-dark leading-tight mb-2">Cámara de Acción 4K Sumergible Accesorios</h3>
+                        <div class="mt-auto pt-4">
+                            <button onclick="comprarStock('Cámara de Acción 4K')" class="w-full bg-brand-dark hover:bg-brand-primary text-white font-bold py-3 rounded-xl flex justify-center items-center gap-2 transition-colors text-sm shadow-md">
+                                <i data-lucide="shopping-cart" class="h-4 w-4"></i> Lo Quiero
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Ideas / Inspiration Section (Carrusel) -->
+    <section id="ideas" class="py-24 bg-brand-dark text-white relative overflow-hidden">
+        <!-- Decoraciones -->
+        <div class="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 bg-brand-primary rounded-full mix-blend-screen filter blur-[120px] opacity-40"></div>
+        <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 bg-rose-600 rounded-full mix-blend-screen filter blur-[120px] opacity-20"></div>
+
+        <div class="w-full relative z-10">
+            <div class="text-center mb-12 max-w-4xl mx-auto px-4">
+                <div class="inline-flex items-center justify-center p-3 bg-white/10 backdrop-blur-md rounded-2xl mb-4 border border-white/10 shadow-lg shadow-black/20">
+                    <i data-lucide="lightbulb" class="h-8 w-8 text-brand-blush"></i>
+                </div>
+                <h2 class="text-3xl lg:text-4xl font-extrabold mb-4">¿Sin ideas? Inspírate aquí 💡</h2>
+                <p class="text-brand-blushDark text-lg font-medium">Dale clic a lo que te guste. Conoce lo que más importan nuestros clientes y pídenos una cotización exacta de tu artículo favorito.</p>
+            </div>
+
+            <!-- Carrusel Infinito -->
+            <div class="relative w-full overflow-hidden">
+                <div class="animate-scroll-left gap-6 px-3">
+                    
+                    <!-- Item 1 -->
+                    <a href="#cotizar" onclick="document.getElementById('import-product-name').value='Tenis Exclusivos (Nike, Jordan, etc.)'" class="w-56 h-64 flex-shrink-0 relative group rounded-3xl overflow-hidden block shadow-xl border border-white/10">
+                        <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=400&q=80" alt="Tenis" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex items-end p-5">
+                            <div>
+                                <span class="block text-white font-bold text-lg mb-1">Tenis Exclusivos</span>
+                                <span class="text-brand-primary font-semibold text-sm flex items-center gap-1 group-hover:text-white transition-colors">Cotizar <i data-lucide="arrow-right" class="h-3 w-3"></i></span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Item 3 -->
+                    <a href="#cotizar" onclick="document.getElementById('import-product-name').value='Reloj de Lujo'" class="w-56 h-64 flex-shrink-0 relative group rounded-3xl overflow-hidden block shadow-xl border border-white/10">
+                        <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=400&q=80" alt="Relojes" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex items-end p-5">
+                            <div>
+                                <span class="block text-white font-bold text-lg mb-1">Relojes de Lujo</span>
+                                <span class="text-brand-primary font-semibold text-sm flex items-center gap-1 group-hover:text-white transition-colors">Cotizar <i data-lucide="arrow-right" class="h-3 w-3"></i></span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Item 5 -->
+                    <a href="#cotizar" onclick="document.getElementById('import-product-name').value='Vitaminas y Suplementos'" class="w-56 h-64 flex-shrink-0 relative group rounded-3xl overflow-hidden block shadow-xl border border-white/10">
+                        <img src="https://images.unsplash.com/photo-1584017911766-d451b3d0e843?auto=format&fit=crop&w=400&q=80" alt="Vitaminas" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex items-end p-5">
+                            <div>
+                                <span class="block text-white font-bold text-lg mb-1">Suplementos</span>
+                                <span class="text-brand-primary font-semibold text-sm flex items-center gap-1 group-hover:text-white transition-colors">Cotizar <i data-lucide="arrow-right" class="h-3 w-3"></i></span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Item 6 -->
+                    <a href="#cotizar" onclick="document.getElementById('import-product-name').value='Bolso de Diseñador'" class="w-56 h-64 flex-shrink-0 relative group rounded-3xl overflow-hidden block shadow-xl border border-white/10">
+                        <img src="https://images.unsplash.com/photo-1584916201218-f4242ceb4809?auto=format&fit=crop&w=400&q=80" alt="Bolsos" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex items-end p-5">
+                            <div>
+                                <span class="block text-white font-bold text-lg mb-1">Bolsos de Diseñador</span>
+                                <span class="text-brand-primary font-semibold text-sm flex items-center gap-1 group-hover:text-white transition-colors">Cotizar <i data-lucide="arrow-right" class="h-3 w-3"></i></span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Item 7 -->
+                    <a href="#cotizar" onclick="document.getElementById('import-product-name').value='Cámara Digital / Drone'" class="w-56 h-64 flex-shrink-0 relative group rounded-3xl overflow-hidden block shadow-xl border border-white/10">
+                        <img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=400&q=80" alt="Cámaras" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex items-end p-5">
+                            <div>
+                                <span class="block text-white font-bold text-lg mb-1">Cámaras y Drones</span>
+                                <span class="text-brand-primary font-semibold text-sm flex items-center gap-1 group-hover:text-white transition-colors">Cotizar <i data-lucide="arrow-right" class="h-3 w-3"></i></span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- REPETICIÓN DE ITEMS PARA EL EFECTO INFINITO -->
+                    <!-- Item 1 (Repetido) -->
+                    <a href="#cotizar" onclick="document.getElementById('import-product-name').value='Tenis Exclusivos (Nike, Jordan, etc.)'" class="w-56 h-64 flex-shrink-0 relative group rounded-3xl overflow-hidden block shadow-xl border border-white/10">
+                        <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=400&q=80" alt="Tenis" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex items-end p-5">
+                            <div>
+                                <span class="block text-white font-bold text-lg mb-1">Tenis Exclusivos</span>
+                                <span class="text-brand-primary font-semibold text-sm flex items-center gap-1 group-hover:text-white transition-colors">Cotizar <i data-lucide="arrow-right" class="h-3 w-3"></i></span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Item 3 (Repetido) -->
+                    <a href="#cotizar" onclick="document.getElementById('import-product-name').value='Reloj de Lujo'" class="w-56 h-64 flex-shrink-0 relative group rounded-3xl overflow-hidden block shadow-xl border border-white/10">
+                        <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=400&q=80" alt="Relojes" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex items-end p-5">
+                            <div>
+                                <span class="block text-white font-bold text-lg mb-1">Relojes de Lujo</span>
+                                <span class="text-brand-primary font-semibold text-sm flex items-center gap-1 group-hover:text-white transition-colors">Cotizar <i data-lucide="arrow-right" class="h-3 w-3"></i></span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Item 5 (Repetido) -->
+                    <a href="#cotizar" onclick="document.getElementById('import-product-name').value='Vitaminas y Suplementos'" class="w-56 h-64 flex-shrink-0 relative group rounded-3xl overflow-hidden block shadow-xl border border-white/10">
+                        <img src="https://images.unsplash.com/photo-1584017911766-d451b3d0e843?auto=format&fit=crop&w=400&q=80" alt="Vitaminas" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex items-end p-5">
+                            <div>
+                                <span class="block text-white font-bold text-lg mb-1">Suplementos</span>
+                                <span class="text-brand-primary font-semibold text-sm flex items-center gap-1 group-hover:text-white transition-colors">Cotizar <i data-lucide="arrow-right" class="h-3 w-3"></i></span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Item 6 (Repetido) -->
+                    <a href="#cotizar" onclick="document.getElementById('import-product-name').value='Bolso de Diseñador'" class="w-56 h-64 flex-shrink-0 relative group rounded-3xl overflow-hidden block shadow-xl border border-white/10">
+                        <img src="https://images.unsplash.com/photo-1584916201218-f4242ceb4809?auto=format&fit=crop&w=400&q=80" alt="Bolsos" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex items-end p-5">
+                            <div>
+                                <span class="block text-white font-bold text-lg mb-1">Bolsos de Diseñador</span>
+                                <span class="text-brand-primary font-semibold text-sm flex items-center gap-1 group-hover:text-white transition-colors">Cotizar <i data-lucide="arrow-right" class="h-3 w-3"></i></span>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Item 7 (Repetido) -->
+                    <a href="#cotizar" onclick="document.getElementById('import-product-name').value='Cámara Digital / Drone'" class="w-56 h-64 flex-shrink-0 relative group rounded-3xl overflow-hidden block shadow-xl border border-white/10">
+                        <img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=400&q=80" alt="Cámaras" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex items-end p-5">
+                            <div>
+                                <span class="block text-white font-bold text-lg mb-1">Cámaras y Drones</span>
+                                <span class="text-brand-primary font-semibold text-sm flex items-center gap-1 group-hover:text-white transition-colors">Cotizar <i data-lucide="arrow-right" class="h-3 w-3"></i></span>
+                            </div>
+                        </div>
+                    </a>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quote / Importation Form Section -->
+    <section id="cotizar" class="py-24 bg-white relative border-t border-brand-blushDark">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-brand-blush rounded-[3rem] p-8 md:p-14 shadow-2xl border border-white relative overflow-hidden">
+                
+                <!-- Forma geométrica de decoración en el formulario -->
+                <div class="absolute -top-24 -right-24 w-64 h-64 bg-white rounded-full opacity-60 blur-3xl"></div>
+
+                <div class="text-center mb-10 relative z-10">
+                    <div class="inline-flex items-center justify-center p-4 bg-white text-brand-primary rounded-2xl mb-6 shadow-sm border border-brand-primary/10">
+                        <i data-lucide="plane" class="h-8 w-8"></i>
+                    </div>
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-brand-dark mb-4">Cotiza tu Importación</h2>
+                    <p class="text-brand-dark/70 text-lg font-medium">Indícanos el nombre del producto que deseas traer de Estados Unidos, y te diremos cuánto cuesta puesto en Colombia.</p>
+                </div>
+
+                <!-- Form to WhatsApp -->
+                <form id="import-form" class="space-y-6 relative z-10">
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Nombre -->
+                        <div>
+                            <label for="import-name" class="block text-sm font-bold text-brand-dark mb-2">Tu Nombre Completo</label>
+                            <input type="text" id="import-name" required class="w-full px-5 py-4 rounded-xl border border-white bg-white focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all outline-none text-brand-dark placeholder-brand-dark/40 shadow-sm" placeholder="Ej: Carlos Ramírez">
+                        </div>
+
+                        <!-- Teléfono -->
+                        <div>
+                            <label for="import-phone" class="block text-sm font-bold text-brand-dark mb-2">Teléfono Celular</label>
+                            <input type="tel" id="import-phone" required class="w-full px-5 py-4 rounded-xl border border-white bg-white focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all outline-none text-brand-dark placeholder-brand-dark/40 shadow-sm" placeholder="Ej: 300 123 4567">
+                        </div>
+
+                        <!-- Nombre del Producto -->
+                        <div class="md:col-span-2">
+                            <label for="import-product-name" class="block text-sm font-bold text-brand-dark mb-2">Nombre del Producto</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                    <i data-lucide="package" class="h-5 w-5 text-brand-dark/40"></i>
+                                </div>
+                                <input type="text" id="import-product-name" required class="w-full pl-12 pr-5 py-4 rounded-xl border border-white bg-white focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all outline-none text-brand-dark placeholder-brand-dark/40 shadow-sm" placeholder="Ej: Apple iPhone 15 Pro Max 256GB o Tenis Nike Air Max talla 9">
+                            </div>
+                        </div>
+
+                        <!-- Especificaciones -->
+                        <div class="md:col-span-2">
+                            <label for="import-details" class="block text-sm font-bold text-brand-dark mb-2">Especificaciones o Detalles</label>
+                            <textarea id="import-details" rows="3" required class="w-full px-5 py-4 rounded-xl border border-white bg-white focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all outline-none text-brand-dark placeholder-brand-dark/40 shadow-sm" placeholder="Ej: Quiero el color Azul Marino (Navy Blue), en talla L. O la versión de 256GB de almacenamiento."></textarea>
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-10">
+                        <button type="submit" class="w-full md:w-auto bg-[#25D366] hover:bg-[#1ebe5c] text-white px-10 py-4 rounded-2xl font-bold text-lg transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1 flex items-center justify-center mx-auto gap-3">
+                            <i data-lucide="message-circle" class="h-6 w-6"></i>
+                            Enviar a WhatsApp
+                        </button>
+                        <p class="text-sm text-brand-dark/60 mt-5 font-medium"><i data-lucide="lock" class="h-3 w-3 inline mr-1"></i>Tus datos están seguros. Te responderemos lo más pronto posible.</p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-brand-dark text-brand-blush py-16 border-t-4 border-brand-primary">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                <!-- Columna 1 -->
+                <div>
+                    <div class="flex items-center mb-6">
+                        <img src="WhatsApp Image 2026-04-17 at 3.37.27 PM.jpeg" alt="Logo US Select" class="h-16 w-auto rounded-2xl bg-white p-2 shadow-lg" onerror="this.src='https://ui-avatars.com/api/?name=US+Select&background=C93B57&color=fff&rounded=true'">
+                    </div>
+                    <p class="text-brand-blushDark mb-6 font-medium leading-relaxed">Tu conexión directa y confiable con el mercado de Estados Unidos. Compras 100% garantizadas y envíos a toda Colombia.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-primary hover:text-white transition-all shadow-inner">
+                            <i data-lucide="instagram" class="h-5 w-5"></i>
+                        </a>
+                        <a href="#" class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-primary hover:text-white transition-all shadow-inner">
+                            <i data-lucide="facebook" class="h-5 w-5"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Columna 2 -->
+                <div>
+                    <h4 class="font-extrabold text-white text-xl mb-6">Enlaces de Interés</h4>
+                    <ul class="space-y-4">
+                        <li><a href="#como-funciona" class="text-brand-blushDark hover:text-white transition-colors font-medium flex items-center gap-2"><i data-lucide="chevron-right" class="h-4 w-4 text-brand-primary"></i> ¿Cómo funciona la importación?</a></li>
+                        <li><a href="#stock" class="text-brand-blushDark hover:text-white transition-colors font-medium flex items-center gap-2"><i data-lucide="chevron-right" class="h-4 w-4 text-brand-primary"></i> Productos en Stock Inmediato</a></li>
+                        <li><a href="#ideas" class="text-brand-blushDark hover:text-white transition-colors font-medium flex items-center gap-2"><i data-lucide="chevron-right" class="h-4 w-4 text-brand-primary"></i> Inspiración de Compras</a></li>
+                        <li><a href="#cotizar" class="text-brand-blushDark hover:text-white transition-colors font-medium flex items-center gap-2"><i data-lucide="chevron-right" class="h-4 w-4 text-brand-primary"></i> Cotizar un producto</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Columna 3 -->
+                <div>
+                    <h4 class="font-extrabold text-white text-xl mb-6">Contáctanos</h4>
+                    <ul class="space-y-5">
+                        <li class="flex items-start bg-white/5 p-4 rounded-xl border border-white/5">
+                            <i data-lucide="map-pin" class="h-6 w-6 text-brand-primary mr-4 mt-0.5"></i>
+                            <span class="text-brand-blushDark font-medium">Bogotá, Colombia<br><span class="text-sm text-brand-primary">(Envíos Nacionales)</span></span>
+                        </li>
+                        <li class="flex items-center bg-white/5 p-4 rounded-xl border border-white/5">
+                            <i data-lucide="phone" class="h-6 w-6 text-brand-primary mr-4"></i>
+                            <span class="text-brand-blushDark font-medium">+57 350 242 8276</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-white/10 mt-16 pt-8 flex flex-col md:flex-row justify-between items-center text-brand-blushDark/60 text-sm font-medium">
+                <p>&copy; <span id="current-year"></span> US Select. Todos los derechos reservados.</p>
+                <p class="mt-2 md:mt-0 bg-brand-primary/20 px-3 py-1 rounded-md text-brand-primary">Importaciones seguras desde USA 🇺🇸</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Inicializar Iconos Lucide
+        lucide.createIcons();
+
+        // Actualizar año en el footer
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+
+        // Toggle del Menú Móvil
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+        });
+
+        const mobileLinks = menu.querySelectorAll('a');
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                menu.classList.add('hidden');
+            });
+        });
+
+        // Efecto Navbar al hacer scroll
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 20) {
+                navbar.classList.add('shadow-md');
+                navbar.classList.remove('shadow-sm');
+            } else {
+                navbar.classList.remove('shadow-md');
+                navbar.classList.add('shadow-sm');
+            }
+        });
+
+        // --- LÓGICA DE WHATSAPP PARA US SELECT ---
+        // Número de contacto fijo
+        const phoneNumber = '573502428276'; 
+
+        // Función 1: Compra directa desde el Stock
+        window.comprarStock = function(nombreProducto) {
+            const mensaje = `¡Hola US Select! 🇺🇸📦\n\nEstoy interesado(a) en comprar un producto que tienen para entrega inmediata:\n\n🛒 *Producto:* ${nombreProducto}\n\nPor favor, indíquenme el precio exacto y el proceso de pago/envío. ¡Gracias!`;
+            const encodedText = encodeURIComponent(mensaje);
+            window.open(`https://wa.me/${phoneNumber}?text=${encodedText}`, '_blank');
+        };
+
+        // Función 2: Cotización de Importación (Formulario)
+        const formCotizar = document.getElementById('import-form');
+        
+        formCotizar.addEventListener('submit', function(e) {
+            e.preventDefault(); 
+
+            // Recolectar datos
+            const name = document.getElementById('import-name').value;
+            const phone = document.getElementById('import-phone').value;
+            const productName = document.getElementById('import-product-name').value;
+            const details = document.getElementById('import-details').value;
+
+            // Construir mensaje
+            const whatsappText = `¡Hola US Select! ✈️🇺🇸\n\nQuiero cotizar la importación de un producto. Aquí están mis datos:\n\n👤 *Nombre:* ${name}\n📱 *Teléfono:* ${phone}\n\n🛍️ *Nombre del Producto:*\n${productName}\n\n📋 *Especificaciones/Detalles:*\n${details}\n\n¿Me pueden confirmar el costo total puesto en Colombia? ¡Quedo atent@!`;
+
+            const encodedText = encodeURIComponent(whatsappText);
+            window.open(`https://wa.me/${phoneNumber}?text=${encodedText}`, '_blank');
+            formCotizar.reset();
+        });
+    </script>
+</body>
+</html>
