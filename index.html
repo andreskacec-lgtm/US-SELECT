@@ -74,9 +74,39 @@
         .animate-scroll-left:hover {
             animation-play-state: paused;
         }
+
+        /* --- CUSTOM CURSOR STYLES --- */
+        @media (pointer: fine) {
+            body {
+                cursor: none; /* Oculta el cursor normal en PC */
+            }
+            .custom-cursor {
+                position: fixed;
+                top: 0;
+                left: 0;
+                pointer-events: none;
+                z-index: 99999;
+                transform: translate(-50%, -50%);
+                transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), color 0.2s ease-out;
+                color: #D23056; /* Color primario US Select */
+                filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.15));
+            }
+            /* Estado del cursor cuando pasa por encima de un botón o enlace */
+            .custom-cursor.hovering {
+                transform: translate(-50%, -50%) scale(1.4) rotate(15deg); /* Se hace más grande y gira como despegando */
+                color: #A62241;
+                filter: drop-shadow(0 8px 10px rgba(210, 48, 86, 0.4));
+            }
+        }
     </style>
 </head>
 <body class="font-sans bg-brand-blush text-brand-dark antialiased selection:bg-brand-primary selection:text-white">
+
+    <!-- Div para el Cursor Personalizado (Avioncito) -->
+    <div id="custom-cursor" class="custom-cursor hidden md:flex items-center justify-center">
+        <!-- Ícono de avión apuntando como un puntero de ratón (-rotate-90) y relleno de color (fill-current) -->
+        <i data-lucide="plane" class="h-7 w-7 transform -rotate-90 fill-current"></i>
+    </div>
 
     <!-- Navbar -->
     <nav class="fixed w-full z-50 glass-nav transition-all duration-300" id="navbar">
@@ -90,8 +120,8 @@
                 <!-- Desktop Menu -->
                 <div class="hidden md:flex space-x-8 items-center">
                     <a href="#como-funciona" class="text-brand-dark/80 hover:text-brand-primary font-semibold transition-colors">¿Cómo funciona?</a>
-                    <a href="#stock" class="text-brand-dark/80 hover:text-brand-primary font-semibold transition-colors flex items-center gap-1">
-                        <i data-lucide="package" class="h-4 w-4"></i> Entrega Inmediata
+                    <a href="#maquillaje" class="text-brand-dark/80 hover:text-brand-primary font-semibold transition-colors flex items-center gap-1">
+                        <i data-lucide="sparkles" class="h-4 w-4"></i> Cosmética & Belleza
                     </a>
                     <a href="#ideas" class="text-brand-primary font-bold hover:text-brand-primaryHover transition-colors flex items-center gap-1">
                         <i data-lucide="lightbulb" class="h-4 w-4"></i> Inspiración
@@ -114,8 +144,8 @@
         <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-brand-blush shadow-xl absolute w-full z-40">
             <div class="px-4 pt-2 pb-6 space-y-2">
                 <a href="#como-funciona" class="block px-3 py-3 text-base font-semibold text-brand-dark/80 hover:bg-brand-blush hover:text-brand-primary rounded-lg">¿Cómo funciona?</a>
-                <a href="#stock" class="block px-3 py-3 text-base font-semibold text-brand-dark/80 hover:bg-brand-blush hover:text-brand-primary rounded-lg flex items-center gap-2">
-                    <i data-lucide="package" class="h-5 w-5"></i> Entrega Inmediata (Stock)
+                <a href="#maquillaje" class="block px-3 py-3 text-base font-semibold text-brand-dark/80 hover:bg-brand-blush hover:text-brand-primary rounded-lg flex items-center gap-2">
+                    <i data-lucide="sparkles" class="h-5 w-5"></i> Cosmética & Belleza
                 </a>
                 <a href="#ideas" class="block px-3 py-3 text-base font-bold text-brand-primary hover:bg-brand-blush rounded-lg flex items-center gap-2">
                     <i data-lucide="lightbulb" class="h-5 w-5"></i> Inspiración de Compras
@@ -149,14 +179,14 @@
                         Lo que quieras de <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-primary to-rose-400">USA</span>,<br> en la puerta de tu casa.
                     </h1>
                     <p class="text-lg sm:text-xl text-brand-dark/70 mb-8 max-w-2xl mx-auto lg:mx-0 font-medium">
-                        En <strong class="text-brand-dark">US Select</strong> importamos el producto exacto que buscas directamente desde Estados Unidos. Además, contamos con artículos exclusivos en stock listos para entrega inmediata.
+                        En <strong class="text-brand-dark">US Select</strong> importamos el producto exacto que buscas directamente desde Estados Unidos. Alta gama, tecnología, cosmética y más.
                     </p>
                     <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                         <a href="#cotizar" class="bg-brand-primary hover:bg-brand-primaryHover text-white px-8 py-4 rounded-xl font-bold text-lg transition-all shadow-lg shadow-brand-primary/30 flex items-center justify-center gap-2 hover:-translate-y-1">
                             <i data-lucide="search" class="h-5 w-5"></i> Traer un producto
                         </a>
-                        <a href="#stock" class="bg-white hover:bg-brand-blushDark text-brand-dark border-2 border-white px-8 py-4 rounded-xl font-bold text-lg transition-all flex items-center justify-center gap-2 hover:-translate-y-1 shadow-md">
-                            <i data-lucide="shopping-bag" class="h-5 w-5 text-brand-primary"></i> Ver Stock Local
+                        <a href="#maquillaje" class="bg-white hover:bg-brand-blushDark text-brand-dark border-2 border-white px-8 py-4 rounded-xl font-bold text-lg transition-all flex items-center justify-center gap-2 hover:-translate-y-1 shadow-md">
+                            <i data-lucide="sparkles" class="h-5 w-5 text-brand-primary"></i> Ver Catálogo Belleza
                         </a>
                     </div>
                 </div>
@@ -235,187 +265,67 @@
         </div>
     </section>
 
-    <!-- In Stock Section (10 Products) -->
-    <section id="stock" class="py-24 bg-brand-blush relative">
+    <!-- NEW SECTION: Cosmética y Maquillaje Coreano (Bento Grid) -->
+    <section id="maquillaje" class="py-24 bg-brand-blush relative border-t border-brand-blushDark">
         <!-- Decoración de fondo -->
-        <div class="absolute top-0 right-0 w-full h-64 bg-gradient-to-b from-white to-transparent opacity-50 z-0"></div>
+        <div class="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-20 pointer-events-none"></div>
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
                 <div class="max-w-2xl">
-                    <span class="text-brand-primary font-extrabold tracking-wider uppercase text-sm mb-2 block">Stock Inmediato</span>
-                    <h2 class="text-3xl md:text-4xl font-extrabold text-brand-dark">Productos Exclusivos</h2>
-                    <p class="text-brand-dark/70 mt-4 text-lg font-medium">No esperes los tiempos de importación. Estos artículos ya están en Colombia listos para ser despachados hoy mismo.</p>
+                    <span class="text-brand-primary font-extrabold tracking-wider uppercase text-sm mb-2 block flex items-center gap-2">
+                        <i data-lucide="sparkles" class="h-4 w-4"></i> Belleza & Cuidado
+                    </span>
+                    <h2 class="text-4xl md:text-5xl font-extrabold text-brand-dark">Cosmética Coreana y<br>Maquillaje de Alta Gama</h2>
+                    <p class="text-brand-dark/70 mt-4 text-lg font-medium">Olvídate de las imitaciones. Importamos para ti las marcas de maquillaje más prestigiosas del mundo y el mejor skincare directamente de las tendencias de Corea.</p>
                 </div>
-                <div class="flex items-center gap-2 text-sm font-bold text-brand-primary bg-white px-5 py-2.5 rounded-xl shadow-sm border border-brand-primary/10">
-                    <i data-lucide="truck" class="h-5 w-5"></i> Envío Nacional Express
+                <div>
+                    <button onclick="document.getElementById('import-product-name').value='Productos de Skincare/Maquillaje'; document.getElementById('cotizar').scrollIntoView();" class="bg-brand-dark hover:bg-brand-primary text-white px-6 py-3 rounded-xl font-bold transition-all shadow-md flex items-center gap-2 hover:-translate-y-1">
+                        Cotizar mi rutina <i data-lucide="arrow-right" class="h-4 w-4"></i>
+                    </button>
                 </div>
             </div>
 
-            <!-- Grid 10 Productos -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+            <!-- Bento Grid Gallery -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 auto-rows-[250px] md:auto-rows-[300px]">
                 
-                <!-- Product 1 -->
-                <div class="product-card bg-white rounded-3xl overflow-hidden flex flex-col h-full shadow-sm border border-white">
-                    <div class="relative aspect-square overflow-hidden bg-white p-2">
-                        <img src="cafe.jpeg" alt="Billetera Michael Kors" class="object-cover w-full h-full rounded-2xl">
-                        <span class="absolute top-4 right-4 bg-brand-primary text-white text-xs font-bold px-3 py-1.5 rounded-lg shadow-md">Stock</span>
-                    </div>
-                    <div class="p-6 flex flex-col flex-grow">
-                        <p class="text-xs text-brand-primary font-bold mb-1 uppercase tracking-wider">Designer</p>
-                        <h3 class="text-lg font-bold text-brand-dark leading-tight mb-2">Billetera Michael Kors Original Monograma</h3>
-                        <div class="mt-auto pt-4">
-                            <button onclick="comprarStock('Billetera Michael Kors Monograma')" class="w-full bg-brand-dark hover:bg-brand-primary text-white font-bold py-3 rounded-xl flex justify-center items-center gap-2 transition-colors text-sm shadow-md">
-                                <i data-lucide="shopping-cart" class="h-4 w-4"></i> Lo Quiero
-                            </button>
-                        </div>
+                <!-- Imagen Principal (Grande) -->
+                <div class="md:col-span-2 md:row-span-2 relative rounded-3xl overflow-hidden group shadow-lg cursor-pointer" onclick="document.getElementById('import-product-name').value='Skincare Coreano (K-Beauty)'; document.getElementById('cotizar').scrollIntoView();">
+                    <img src="https://images.unsplash.com/photo-1620916566398-39f1143ab7be?auto=format&fit=crop&w=800&q=80" alt="Skincare Coreano" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-8">
+                        <span class="bg-brand-primary/90 text-white text-xs font-bold px-3 py-1 rounded-md w-max mb-3 uppercase tracking-wide">K-Beauty</span>
+                        <h3 class="text-3xl font-extrabold text-white mb-2 leading-tight">El secreto de la<br>Piel de Porcelana</h3>
+                        <p class="text-white/80 font-medium">Cotiza serums, tónicos y protectores solares coreanos.</p>
                     </div>
                 </div>
 
-                <!-- Product 2 -->
-                <div class="product-card bg-white rounded-3xl overflow-hidden flex flex-col h-full shadow-sm border border-white">
-                    <div class="relative aspect-square overflow-hidden bg-white p-2">
-                        <img src="blanco.jpeg" alt="Cosmetiquera Michael Kors" class="object-cover w-full h-full rounded-2xl">
-                    </div>
-                    <div class="p-6 flex flex-col flex-grow">
-                        <p class="text-xs text-brand-primary font-bold mb-1 uppercase tracking-wider">Designer</p>
-                        <h3 class="text-lg font-bold text-brand-dark leading-tight mb-2">Cosmetiquera Michael Kors Jet-Set Fruit</h3>
-                        <div class="mt-auto pt-4">
-                            <button onclick="comprarStock('Cosmetiquera Michael Kors Jet-Set')" class="w-full bg-brand-dark hover:bg-brand-primary text-white font-bold py-3 rounded-xl flex justify-center items-center gap-2 transition-colors text-sm shadow-md">
-                                <i data-lucide="shopping-cart" class="h-4 w-4"></i> Lo Quiero
-                            </button>
-                        </div>
+                <!-- Imagen Pequeña 1 -->
+                <div class="md:col-span-1 md:row-span-1 relative rounded-3xl overflow-hidden group shadow-lg cursor-pointer" onclick="document.getElementById('import-product-name').value='Maquillaje de Alta Gama / Paletas'; document.getElementById('cotizar').scrollIntoView();">
+                    <img src="cosmetico.jpg" alt="Sombras de Maquillaje Alta Gama" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex flex-col justify-end p-6">
+                        <h3 class="text-xl font-bold text-white mb-1">Alta Gama</h3>
+                        <p class="text-white/70 text-sm">Paletas y Sombras</p>
                     </div>
                 </div>
 
-                <!-- Product 3 -->
-                <div class="product-card bg-white rounded-3xl overflow-hidden flex flex-col h-full shadow-sm border border-white">
-                    <div class="relative aspect-square overflow-hidden bg-white p-2">
-                        <img src="tocobo.jpeg" alt="Bloqueador Solar Tocobo" class="object-cover w-full h-full rounded-2xl">
-                    </div>
-                    <div class="p-6 flex flex-col flex-grow">
-                        <p class="text-xs text-brand-primary font-bold mb-1 uppercase tracking-wider">Skincare</p>
-                        <h3 class="text-lg font-bold text-brand-dark leading-tight mb-2">Bloqueador Solar Tocobo Cotton Soft Sun Stick</h3>
-                        <div class="mt-auto pt-4">
-                            <button onclick="comprarStock('Bloqueador Solar Tocobo')" class="w-full bg-brand-dark hover:bg-brand-primary text-white font-bold py-3 rounded-xl flex justify-center items-center gap-2 transition-colors text-sm shadow-md">
-                                <i data-lucide="shopping-cart" class="h-4 w-4"></i> Lo Quiero
-                            </button>
-                        </div>
+                <!-- Imagen Pequeña 2 -->
+                <div class="md:col-span-1 md:row-span-1 relative rounded-3xl overflow-hidden group shadow-lg cursor-pointer" onclick="document.getElementById('import-product-name').value='Brochas y Accesorios de Maquillaje'; document.getElementById('cotizar').scrollIntoView();">
+                    <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=500&q=80" alt="Brochas" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex flex-col justify-end p-6">
+                        <h3 class="text-xl font-bold text-white mb-1">Herramientas</h3>
+                        <p class="text-white/70 text-sm">Brochas y Sets</p>
                     </div>
                 </div>
 
-                <!-- Product 4 -->
-                <div class="product-card bg-white rounded-3xl overflow-hidden flex flex-col h-full shadow-sm border border-white">
-                    <div class="relative aspect-square overflow-hidden bg-white p-2">
-                        <img src="bolso.jpeg" alt="Billetera Coach Marrón" class="object-cover w-full h-full rounded-2xl">
-                    </div>
-                    <div class="p-6 flex flex-col flex-grow">
-                        <p class="text-xs text-brand-primary font-bold mb-1 uppercase tracking-wider">Designer</p>
-                        <h3 class="text-lg font-bold text-brand-dark leading-tight mb-2">Billetera de Mano Coach Monograma Marrón</h3>
-                        <div class="mt-auto pt-4">
-                            <button onclick="comprarStock('Billetera de Mano Coach Marrón')" class="w-full bg-brand-dark hover:bg-brand-primary text-white font-bold py-3 rounded-xl flex justify-center items-center gap-2 transition-colors text-sm shadow-md">
-                                <i data-lucide="shopping-cart" class="h-4 w-4"></i> Lo Quiero
-                            </button>
-                        </div>
+                <!-- Imagen Mediana Horizontal -->
+                <div class="md:col-span-2 md:row-span-1 relative rounded-3xl overflow-hidden group shadow-lg cursor-pointer" onclick="document.getElementById('import-product-name').value='Labiales y Lip Gloss Virales'; document.getElementById('cotizar').scrollIntoView();">
+                    <img src="https://images.unsplash.com/photo-1599305090598-fe179d501227?auto=format&fit=crop&w=800&q=80" alt="Labiales y Gloss" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex flex-col justify-end p-6">
+                        <h3 class="text-2xl font-bold text-white mb-1">Productos Virales</h3>
+                        <p class="text-white/80">Labiales, tintas y los lip gloss más buscados.</p>
                     </div>
                 </div>
-
-                <!-- Product 5 -->
-                <div class="product-card bg-white rounded-3xl overflow-hidden flex flex-col h-full shadow-sm border border-white">
-                    <div class="relative aspect-square overflow-hidden bg-white p-2">
-                        <img src="mano.jpeg" alt="Billetera Coach Negra" class="object-cover w-full h-full rounded-2xl">
-                    </div>
-                    <div class="p-6 flex flex-col flex-grow">
-                        <p class="text-xs text-brand-primary font-bold mb-1 uppercase tracking-wider">Designer</p>
-                        <h3 class="text-lg font-bold text-brand-dark leading-tight mb-2">Billetera de Mano Coach Clásica Negra</h3>
-                        <div class="mt-auto pt-4">
-                            <button onclick="comprarStock('Billetera de Mano Coach Negra')" class="w-full bg-brand-dark hover:bg-brand-primary text-white font-bold py-3 rounded-xl flex justify-center items-center gap-2 transition-colors text-sm shadow-md">
-                                <i data-lucide="shopping-cart" class="h-4 w-4"></i> Lo Quiero
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Product 6 (AMP Board) -->
-                <div class="product-card bg-white rounded-3xl overflow-hidden flex flex-col h-full shadow-sm border border-white">
-                    <div class="relative aspect-square overflow-hidden bg-white p-2">
-                        <img src="long.jpeg" alt="Patineta Eléctrica AMP Board" class="object-contain w-full h-full rounded-2xl">
-                    </div>
-                    <div class="p-6 flex flex-col flex-grow">
-                        <p class="text-xs text-brand-primary font-bold mb-1 uppercase tracking-wider">Movilidad / Tech</p>
-                        <h3 class="text-lg font-bold text-brand-dark leading-tight mb-2">Patineta Eléctrica AMP Board Premium</h3>
-                        <div class="mt-auto pt-4">
-                            <button onclick="comprarStock('Patineta Eléctrica AMP Board')" class="w-full bg-brand-dark hover:bg-brand-primary text-white font-bold py-3 rounded-xl flex justify-center items-center gap-2 transition-colors text-sm shadow-md">
-                                <i data-lucide="shopping-cart" class="h-4 w-4"></i> Lo Quiero
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Product 7 (Shampoo Moev) -->
-                <div class="product-card bg-white rounded-3xl overflow-hidden flex flex-col h-full shadow-sm border border-white">
-                    <div class="relative aspect-square overflow-hidden bg-white p-2">
-                        <img src="shamp.jpeg" alt="Shampoo Moev" class="object-contain w-full h-full rounded-2xl">
-                    </div>
-                    <div class="p-6 flex flex-col flex-grow">
-                        <p class="text-xs text-brand-primary font-bold mb-1 uppercase tracking-wider">Cuidado Capilar</p>
-                        <h3 class="text-lg font-bold text-brand-dark leading-tight mb-2">Shampoo Moev Annurcatint 300ml</h3>
-                        <div class="mt-auto pt-4">
-                            <button onclick="comprarStock('Shampoo Moev Annurcatint')" class="w-full bg-brand-dark hover:bg-brand-primary text-white font-bold py-3 rounded-xl flex justify-center items-center gap-2 transition-colors text-sm shadow-md">
-                                <i data-lucide="shopping-cart" class="h-4 w-4"></i> Lo Quiero
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Product 8 (Oro) -->
-                <div class="product-card bg-white rounded-3xl overflow-hidden flex flex-col h-full shadow-sm border border-white">
-                    <div class="relative aspect-square overflow-hidden bg-white p-2">
-                        <img src="oro.jpg" alt="Lingote de Oro 24K" class="object-cover w-full h-full rounded-2xl">
-                    </div>
-                    <div class="p-6 flex flex-col flex-grow">
-                        <p class="text-xs text-brand-primary font-bold mb-1 uppercase tracking-wider">Joyería / Inversión</p>
-                        <h3 class="text-lg font-bold text-brand-dark leading-tight mb-2">Lingote de Oro 24K 1g - Edición Colombia</h3>
-                        <div class="mt-auto pt-4">
-                            <button onclick="comprarStock('Lingote de Oro 24K 1g')" class="w-full bg-brand-dark hover:bg-brand-primary text-white font-bold py-3 rounded-xl flex justify-center items-center gap-2 transition-colors text-sm shadow-md">
-                                <i data-lucide="shopping-cart" class="h-4 w-4"></i> Lo Quiero
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Product 9 -->
-                <div class="product-card bg-white rounded-3xl overflow-hidden flex flex-col h-full shadow-sm border border-white">
-                    <div class="relative aspect-square overflow-hidden bg-white p-2">
-                        <img src="https://images.unsplash.com/photo-1627123424574-724758594e93?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Billetera" class="object-cover w-full h-full rounded-2xl">
-                    </div>
-                    <div class="p-6 flex flex-col flex-grow">
-                        <p class="text-xs text-brand-primary font-bold mb-1 uppercase tracking-wider">Accesorios</p>
-                        <h3 class="text-lg font-bold text-brand-dark leading-tight mb-2">Billetera Minimalista en Cuero Genuino</h3>
-                        <div class="mt-auto pt-4">
-                            <button onclick="comprarStock('Billetera Cuero Minimalista')" class="w-full bg-brand-dark hover:bg-brand-primary text-white font-bold py-3 rounded-xl flex justify-center items-center gap-2 transition-colors text-sm shadow-md">
-                                <i data-lucide="shopping-cart" class="h-4 w-4"></i> Lo Quiero
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Product 10 -->
-                <div class="product-card bg-white rounded-3xl overflow-hidden flex flex-col h-full shadow-sm border border-white">
-                    <div class="relative aspect-square overflow-hidden bg-white p-2">
-                        <img src="https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Cámara de acción" class="object-cover w-full h-full rounded-2xl">
-                    </div>
-                    <div class="p-6 flex flex-col flex-grow">
-                        <p class="text-xs text-brand-primary font-bold mb-1 uppercase tracking-wider">Tecnología</p>
-                        <h3 class="text-lg font-bold text-brand-dark leading-tight mb-2">Cámara de Acción 4K Sumergible Accesorios</h3>
-                        <div class="mt-auto pt-4">
-                            <button onclick="comprarStock('Cámara de Acción 4K')" class="w-full bg-brand-dark hover:bg-brand-primary text-white font-bold py-3 rounded-xl flex justify-center items-center gap-2 transition-colors text-sm shadow-md">
-                                <i data-lucide="shopping-cart" class="h-4 w-4"></i> Lo Quiero
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
+                
             </div>
         </div>
     </section>
@@ -484,11 +394,11 @@
                     </a>
 
                     <!-- Item 7 -->
-                    <a href="#cotizar" onclick="document.getElementById('import-product-name').value='Cámara Digital / Drone'" class="w-56 h-64 flex-shrink-0 relative group rounded-3xl overflow-hidden block shadow-xl border border-white/10">
-                        <img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=400&q=80" alt="Cámaras" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    <a href="#cotizar" onclick="document.getElementById('import-product-name').value='Auriculares de Diadema (AirPods Max, Sony, etc.)'" class="w-56 h-64 flex-shrink-0 relative group rounded-3xl overflow-hidden block shadow-xl border border-white/10">
+                        <img src="https://images.unsplash.com/photo-1618366712010-f4ae9c647dcb?auto=format&fit=crop&w=400&q=80" alt="Audífonos" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex items-end p-5">
                             <div>
-                                <span class="block text-white font-bold text-lg mb-1">Cámaras y Drones</span>
+                                <span class="block text-white font-bold text-lg mb-1">Audio Premium</span>
                                 <span class="text-brand-primary font-semibold text-sm flex items-center gap-1 group-hover:text-white transition-colors">Cotizar <i data-lucide="arrow-right" class="h-3 w-3"></i></span>
                             </div>
                         </div>
@@ -540,11 +450,11 @@
                     </a>
 
                     <!-- Item 7 (Repetido) -->
-                    <a href="#cotizar" onclick="document.getElementById('import-product-name').value='Cámara Digital / Drone'" class="w-56 h-64 flex-shrink-0 relative group rounded-3xl overflow-hidden block shadow-xl border border-white/10">
-                        <img src="https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=400&q=80" alt="Cámaras" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                    <a href="#cotizar" onclick="document.getElementById('import-product-name').value='Auriculares de Diadema (AirPods Max, Sony, etc.)'" class="w-56 h-64 flex-shrink-0 relative group rounded-3xl overflow-hidden block shadow-xl border border-white/10">
+                        <img src="https://images.unsplash.com/photo-1618366712010-f4ae9c647dcb?auto=format&fit=crop&w=400&q=80" alt="Audífonos" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent flex items-end p-5">
                             <div>
-                                <span class="block text-white font-bold text-lg mb-1">Cámaras y Drones</span>
+                                <span class="block text-white font-bold text-lg mb-1">Audio Premium</span>
                                 <span class="text-brand-primary font-semibold text-sm flex items-center gap-1 group-hover:text-white transition-colors">Cotizar <i data-lucide="arrow-right" class="h-3 w-3"></i></span>
                             </div>
                         </div>
@@ -556,7 +466,7 @@
     </section>
 
     <!-- Quote / Importation Form Section -->
-    <section id="cotizar" class="py-24 bg-white relative border-t border-brand-blushDark">
+    <section id="cotizar" class="py-24 bg-white relative">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="bg-brand-blush rounded-[3rem] p-8 md:p-14 shadow-2xl border border-white relative overflow-hidden">
                 
@@ -578,13 +488,13 @@
                         <!-- Nombre -->
                         <div>
                             <label for="import-name" class="block text-sm font-bold text-brand-dark mb-2">Tu Nombre Completo</label>
-                            <input type="text" id="import-name" required class="w-full px-5 py-4 rounded-xl border border-white bg-white focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all outline-none text-brand-dark placeholder-brand-dark/40 shadow-sm" placeholder="Ej: Carlos Ramírez">
+                            <input type="text" id="import-name" required class="w-full px-5 py-4 rounded-xl border border-white bg-white focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all outline-none text-brand-dark placeholder-brand-dark/40 shadow-sm cursor-text" placeholder="Ej: Carlos Ramírez">
                         </div>
 
                         <!-- Teléfono -->
                         <div>
                             <label for="import-phone" class="block text-sm font-bold text-brand-dark mb-2">Teléfono Celular</label>
-                            <input type="tel" id="import-phone" required class="w-full px-5 py-4 rounded-xl border border-white bg-white focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all outline-none text-brand-dark placeholder-brand-dark/40 shadow-sm" placeholder="Ej: 300 123 4567">
+                            <input type="tel" id="import-phone" required class="w-full px-5 py-4 rounded-xl border border-white bg-white focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all outline-none text-brand-dark placeholder-brand-dark/40 shadow-sm cursor-text" placeholder="Ej: 300 123 4567">
                         </div>
 
                         <!-- Nombre del Producto -->
@@ -594,14 +504,14 @@
                                 <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                                     <i data-lucide="package" class="h-5 w-5 text-brand-dark/40"></i>
                                 </div>
-                                <input type="text" id="import-product-name" required class="w-full pl-12 pr-5 py-4 rounded-xl border border-white bg-white focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all outline-none text-brand-dark placeholder-brand-dark/40 shadow-sm" placeholder="Ej: Apple iPhone 15 Pro Max 256GB o Tenis Nike Air Max talla 9">
+                                <input type="text" id="import-product-name" required class="w-full pl-12 pr-5 py-4 rounded-xl border border-white bg-white focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all outline-none text-brand-dark placeholder-brand-dark/40 shadow-sm cursor-text" placeholder="Ej: Protector solar Tocobo o Tenis Nike Air Max talla 9">
                             </div>
                         </div>
 
                         <!-- Especificaciones -->
                         <div class="md:col-span-2">
                             <label for="import-details" class="block text-sm font-bold text-brand-dark mb-2">Especificaciones o Detalles</label>
-                            <textarea id="import-details" rows="3" required class="w-full px-5 py-4 rounded-xl border border-white bg-white focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all outline-none text-brand-dark placeholder-brand-dark/40 shadow-sm" placeholder="Ej: Quiero el color Azul Marino (Navy Blue), en talla L. O la versión de 256GB de almacenamiento."></textarea>
+                            <textarea id="import-details" rows="3" required class="w-full px-5 py-4 rounded-xl border border-white bg-white focus:ring-2 focus:ring-brand-primary focus:border-transparent transition-all outline-none text-brand-dark placeholder-brand-dark/40 shadow-sm cursor-text" placeholder="Ej: Quiero el color Azul Marino (Navy Blue), en talla L. O la versión de 256GB de almacenamiento."></textarea>
                         </div>
                     </div>
 
@@ -617,6 +527,24 @@
         </div>
     </section>
 
+    <!-- NEW SECTION: Banner Instagram -->
+    <section class="bg-gradient-to-r from-brand-primary to-[#FF758C] py-10 relative overflow-hidden">
+        <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/diagonal-striped-brick.png')] opacity-10"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 flex flex-col md:flex-row items-center justify-between text-center md:text-left gap-6">
+            <div class="text-white">
+                <h3 class="text-2xl md:text-3xl font-extrabold flex items-center justify-center md:justify-start gap-3 mb-2">
+                    <i data-lucide="instagram" class="h-8 w-8"></i> Síguenos en Instagram
+                </h3>
+                <p class="text-white/90 font-medium text-lg">Descubre las últimas tendencias, ofertas especiales y los pedidos de nuestros clientes.</p>
+            </div>
+            <div>
+                <a href="https://instagram.com/usselect.bylau" target="_blank" class="bg-white text-brand-primary px-8 py-4 rounded-full font-bold text-lg hover:bg-brand-blush transition-all shadow-xl hover:shadow-2xl flex items-center gap-2 transform hover:-translate-y-1">
+                    @usselect.bylau <i data-lucide="external-link" class="h-5 w-5"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
     <!-- Footer -->
     <footer class="bg-brand-dark text-brand-blush py-16 border-t-4 border-brand-primary">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -628,7 +556,7 @@
                     </div>
                     <p class="text-brand-blushDark mb-6 font-medium leading-relaxed">Tu conexión directa y confiable con el mercado de Estados Unidos. Compras 100% garantizadas y envíos a toda Colombia.</p>
                     <div class="flex space-x-4">
-                        <a href="#" class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-primary hover:text-white transition-all shadow-inner">
+                        <a href="https://instagram.com/usselect.bylau" target="_blank" class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-primary hover:text-white transition-all shadow-inner">
                             <i data-lucide="instagram" class="h-5 w-5"></i>
                         </a>
                         <a href="#" class="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center hover:bg-brand-primary hover:text-white transition-all shadow-inner">
@@ -642,7 +570,7 @@
                     <h4 class="font-extrabold text-white text-xl mb-6">Enlaces de Interés</h4>
                     <ul class="space-y-4">
                         <li><a href="#como-funciona" class="text-brand-blushDark hover:text-white transition-colors font-medium flex items-center gap-2"><i data-lucide="chevron-right" class="h-4 w-4 text-brand-primary"></i> ¿Cómo funciona la importación?</a></li>
-                        <li><a href="#stock" class="text-brand-blushDark hover:text-white transition-colors font-medium flex items-center gap-2"><i data-lucide="chevron-right" class="h-4 w-4 text-brand-primary"></i> Productos en Stock Inmediato</a></li>
+                        <li><a href="#maquillaje" class="text-brand-blushDark hover:text-white transition-colors font-medium flex items-center gap-2"><i data-lucide="chevron-right" class="h-4 w-4 text-brand-primary"></i> Catálogo Cosmética & Belleza</a></li>
                         <li><a href="#ideas" class="text-brand-blushDark hover:text-white transition-colors font-medium flex items-center gap-2"><i data-lucide="chevron-right" class="h-4 w-4 text-brand-primary"></i> Inspiración de Compras</a></li>
                         <li><a href="#cotizar" class="text-brand-blushDark hover:text-white transition-colors font-medium flex items-center gap-2"><i data-lucide="chevron-right" class="h-4 w-4 text-brand-primary"></i> Cotizar un producto</a></li>
                     </ul>
@@ -675,6 +603,29 @@
     <script>
         // Inicializar Iconos Lucide
         lucide.createIcons();
+
+        // --- CUSTOM CURSOR LÓGICA ---
+        const cursor = document.getElementById('custom-cursor');
+        
+        // El cursor solo funciona si la pantalla no es táctil (evita bugs en celulares)
+        if (window.matchMedia("(pointer: fine)").matches) {
+            document.addEventListener('mousemove', (e) => {
+                cursor.style.left = e.clientX + 'px';
+                cursor.style.top = e.clientY + 'px';
+            });
+
+            // Animación al pasar por elementos interactivos
+            const interactables = document.querySelectorAll('a, button, input, textarea, select, .cursor-pointer');
+            
+            interactables.forEach(el => {
+                el.addEventListener('mouseenter', () => {
+                    cursor.classList.add('hovering');
+                });
+                el.addEventListener('mouseleave', () => {
+                    cursor.classList.remove('hovering');
+                });
+            });
+        }
 
         // Actualizar año en el footer
         document.getElementById('current-year').textContent = new Date().getFullYear();
@@ -710,14 +661,7 @@
         // Número de contacto fijo
         const phoneNumber = '573502428276'; 
 
-        // Función 1: Compra directa desde el Stock
-        window.comprarStock = function(nombreProducto) {
-            const mensaje = `¡Hola US Select! 🇺🇸📦\n\nEstoy interesado(a) en comprar un producto que tienen para entrega inmediata:\n\n🛒 *Producto:* ${nombreProducto}\n\nPor favor, indíquenme el precio exacto y el proceso de pago/envío. ¡Gracias!`;
-            const encodedText = encodeURIComponent(mensaje);
-            window.open(`https://wa.me/${phoneNumber}?text=${encodedText}`, '_blank');
-        };
-
-        // Función 2: Cotización de Importación (Formulario)
+        // Función Cotización de Importación (Formulario)
         const formCotizar = document.getElementById('import-form');
         
         formCotizar.addEventListener('submit', function(e) {
